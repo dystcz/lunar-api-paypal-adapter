@@ -23,13 +23,6 @@ You can install the package via composer:
 composer require dystcz/lunar-api-paypal-adapter
 ```
 
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag="lunar-api-paypal-adapter-migrations"
-php artisan migrate
-```
-
 You can publish the config file with:
 
 ```bash
@@ -40,20 +33,19 @@ This is the contents of the published config file:
 
 ```php
 return [
+    'driver' => 'paypal',
+    'type' => 'card',
 ];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="lunar-api-paypal-adapter-views"
 ```
 
 ## Usage
 
 ```php
-$lunarApiPaypalAdapter = new Dystcz\LunarApiPaypalAdapter();
-echo $lunarApiPaypalAdapter->echoPhrase('Hello, Dystcz!');
+// Create a payment intent
+App::make(PaypalPaymentAdapter.php::class)->createIntent($cart)
+
+// Handle a webhook (validate and authorize payment)
+App::make(PaypalPaymentAdapter.php::class)->handleWebhook($request)
 ```
 
 ## Testing
