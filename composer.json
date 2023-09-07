@@ -1,24 +1,36 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "dystcz/lunar-api-paypal-adapter",
+    "description": "This is my package lunar-api-paypal-adapter",
     "keywords": [
-        ":vendor_name",
+        "dystcz",
         "laravel",
-        ":package_slug"
+        "lunar-api-paypal-adapter"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/dystcz/lunar-api-paypal-adapter",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Jakub Theimer",
+            "email": "jakub@dy.st",
             "role": "Developer"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/dystcz/lunar-api.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/dystcz/lunar-paypal.git"
         }
     ],
     "require": {
         "php": "^8.1",
-        "spatie/laravel-package-tools": "^1.14.0",
-        "illuminate/contracts": "^10.0"
+        "dystcz/lunar-api": "dev-feature/payment-gateways-adapters",
+        "dystcz/lunar-paypal": "dev-main",
+        "illuminate/contracts": "^10.0",
+        "spatie/laravel-package-tools": "^1.14.0"
     },
     "require-dev": {
         "laravel/pint": "^1.0",
@@ -31,23 +43,24 @@
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-deprecation-rules": "^1.0",
         "phpstan/phpstan-phpunit": "^1.0",
-        "spatie/laravel-ray": "^1.26"
+        "spatie/laravel-ray": "^1.26",
+        "laravel-json-api/testing": "^2.1"
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src/",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories/"
+            "Dystcz\\LunarApiPaypalAdapter\\": "src/",
+            "Dystcz\\LunarApiPaypalAdapter\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests/",
+            "Dystcz\\LunarApiPaypalAdapter\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
         }
     },
     "scripts": {
         "post-autoload-dump": "@composer run prepare",
-        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "clear": "@php vendor/bin/testbench package:purge-lunar-api-paypal-adapter --ansi",
         "prepare": "@php vendor/bin/testbench package:discover --ansi",
         "build": [
             "@composer run prepare",
@@ -73,11 +86,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
-            ],
-            "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
-            }
+                "Dystcz\\LunarApiPaypalAdapter\\LunarApiPaypalAdapterServiceProvider"
+            ]
         }
     },
     "minimum-stability": "dev",

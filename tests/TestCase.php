@@ -1,36 +1,155 @@
 <?php
 
-namespace VendorName\Skeleton\Tests;
+namespace Dystcz\LunarApiPaypalAdapter\Tests;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
+use Cartalyst\Converter\Laravel\ConverterServiceProvider;
+use Dystcz\LunarApi\JsonApiServiceProvider;
+use Dystcz\LunarApi\LunarApiServiceProvider;
+use Dystcz\LunarApiPaypalAdapter\LunarApiPaypalAdapterServiceProvider;
+use Dystcz\LunarApiPaypalAdapter\Tests\Stubs\Carts\Modifiers\TestShippingModifier;
+use Dystcz\LunarApiPaypalAdapter\Tests\Stubs\JsonApi\V1\Server;
+use Dystcz\LunarApiPaypalAdapter\Tests\Stubs\Lunar\TestTaxDriver;
+use Dystcz\LunarApiPaypalAdapter\Tests\Stubs\Lunar\TestUrlGenerator;
+use Dystcz\LunarApiPaypalAdapter\Tests\Stubs\Users\User;
+use Dystcz\LunarPaypal\LunarPaypalServiceProvider;
+use Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
+use Kalnoy\Nestedset\NestedSetServiceProvider;
+use LaravelJsonApi\Spec\ServiceProvider;
+use LaravelJsonApi\Testing\MakesJsonApiRequests;
+use Livewire\LivewireServiceProvider;
+use Lunar\Base\ShippingModifiers;
+use Lunar\Facades\Taxes;
+use Lunar\LunarServiceProvider;
+use Lunar\Models\Channel;
+use Lunar\Models\Country;
+use Lunar\Models\Currency;
+use Lunar\Models\CustomerGroup;
+use Lunar\Models\TaxClass;
 use Orchestra\Testbench\TestCase as Orchestra;
-use VendorName\Skeleton\SkeletonServiceProvider;
+use Spatie\Activitylog\ActivitylogServiceProvider;
+use Spatie\LaravelBlink\BlinkServiceProvider;
+use Spatie\LaravelData\LaravelDataServiceProvider;
+use Spatie\MediaLibrary\MediaLibraryServiceProvider;
 
 class TestCase extends Orchestra
 {
+    use MakesJsonApiRequests;
+
     protected function setUp(): void
     {
         parent::setUp();
 
-        Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'VendorName\\Skeleton\\Database\\Factories\\'.class_basename($modelName).'Factory'
-        );
+        Taxes::extend('test', function ($app) {
+            return $app->make(TestTaxDriver::class);
+        });
+
+        Currency::factory()->create([
+            'code' => 'EUR',
+            'decimal_places' => 2,
+        ]);
+
+        Country::factory()->create([
+            'name' => 'United Kingdom',
+            'iso3' => 'GBR',
+            'iso2' => 'GB',
+            'phonecode' => '+44',
+            'capital' => 'London',
+            'currency' => 'GBP',
+            'native' => 'English',
+        ]);
+
+        Channel::factory()->create([
+            'default' => true,
+        ]);
+
+        CustomerGroup::factory()->create([
+            'default' => true,
+        ]);
+
+        TaxClass::factory()->create();
+
+        App::get(ShippingModifiers::class)->add(TestShippingModifier::class);
+
+        activity()->disableLogging();
     }
 
     protected function getPackageProviders($app)
     {
         return [
-            SkeletonServiceProvider::class,
+            // Laravel JsonApi
+            \LaravelJsonApi\Encoder\Neomerx\ServiceProvider::class,
+            \LaravelJsonApi\Laravel\ServiceProvider::class,
+            ServiceProvider::class,
+
+            // Lunar core
+            LunarServiceProvider::class,
+            MediaLibraryServiceProvider::class,
+            ActivitylogServiceProvider::class,
+            ConverterServiceProvider::class,
+            NestedSetServiceProvider::class,
+            BlinkServiceProvider::class,
+
+            // Lunar Paypal
+            LunarPaypalServiceProvider::class,
+
+            // Livewire
+            LivewireServiceProvider::class,
+
+            // Laravel Data
+            LaravelDataServiceProvider::class,
+
+            // Lunar API
+            LunarApiServiceProvider::class,
+            JsonApiServiceProvider::class,
+
+            // Lunar API Paypal Adapter
+            LunarApiPaypalAdapterServiceProvider::class,
         ];
     }
 
     public function getEnvironmentSetUp($app)
     {
-        config()->set('database.default', 'testing');
+        $app->useEnvironmentPath(__DIR__.'/..');
+        $app->bootstrapWith([LoadEnvironmentVariables::class]);
 
-        /*
-        $migration = include __DIR__.'/../database/migrations/create_skeleton_table.php.stub';
-        $migration->up();
-        */
+        Config::set('auth.providers.users', [
+            'driver' => 'eloquent',
+            'model' => User::class,
+        ]);
+
+        /**
+         * Lunar configuration
+         */
+        Config::set('lunar-api.additional_servers', [
+            Server::class,
+        ]);
+        Config::set('lunar.urls.generator', TestUrlGenerator::class);
+        Config::set('lunar.taxes.driver', 'test');
+
+        /**
+         * App configuration
+         */
+        Config::set('database.default', 'sqlite');
+        Config::set('database.migrations', 'migrations');
+
+        Config::set('database.connections.sqlite', [
+            'driver' => 'sqlite',
+            'database' => ':memory:',
+            'prefix' => '',
+        ]);
+
+        Config::set('lunar.paypal', require __DIR__.'/../vendor/dystcz/lunar-paypal/config/paypal.php');
+    }
+
+    /**
+     * Define database migrations.
+     *
+     * @return void
+     */
+    protected function defineDatabaseMigrations()
+    {
+        $this->loadLaravelMigrations();
     }
 }
