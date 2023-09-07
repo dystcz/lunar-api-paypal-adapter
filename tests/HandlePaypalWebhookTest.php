@@ -3,8 +3,6 @@
 use Dystcz\LunarApi\Domain\Carts\Events\CartCreated;
 use Dystcz\LunarApi\Domain\Carts\Models\Cart;
 use Dystcz\LunarApi\Domain\Orders\Events\OrderPaid;
-use Dystcz\LunarApi\Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 
 beforeEach(function () {
