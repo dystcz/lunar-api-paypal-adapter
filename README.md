@@ -42,10 +42,10 @@ return [
 
 ```php
 // Create a payment intent
-App::make(PaypalPaymentAdapter.php::class)->createIntent($cart)
+App::make(PaypalPaymentAdapter::class)->createIntent($cart)
 
 // Handle a webhook (validate and authorize payment)
-App::make(PaypalPaymentAdapter.php::class)->handleWebhook($request)
+App::make(PaypalPaymentAdapter::class)->handleWebhook($request)
 ```
 
 ## Testing
