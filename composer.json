@@ -29,9 +29,9 @@
         }
     ],
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "dystcz/lunar-api": "^0.5",
-        "dystcz/lunar-paypal": "dev-main",
+        "dystcz/lunar-paypal": "^0.5",
         "illuminate/contracts": "^10.0",
         "spatie/laravel-package-tools": "^1.14.0"
     },
