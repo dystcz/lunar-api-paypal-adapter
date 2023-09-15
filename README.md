@@ -1,11 +1,11 @@
-# This is my package lunar-api-paypal-adapter
+# Lunar API Paypal Adapter
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/dystcz/lunar-api-paypal-adapter.svg?style=flat-square)](https://packagist.org/packages/dystcz/lunar-api-paypal-adapter)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/dystcz/lunar-api-paypal-adapter/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/dystcz/lunar-api-paypal-adapter/actions?query=workflow%3Arun-tests+branch%3Amain)
+![GitHub Actions](https://github.com/dystcz/lunar-api-paypal-adapter/actions/workflows/tests.yaml/badge.svg)
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/dystcz/lunar-api-paypal-adapter/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/dystcz/lunar-api-paypal-adapter/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/dystcz/lunar-api-paypal-adapter.svg?style=flat-square)](https://packagist.org/packages/dystcz/lunar-api-paypal-adapter)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+TODO: Write description
 
 ## Installation
 
