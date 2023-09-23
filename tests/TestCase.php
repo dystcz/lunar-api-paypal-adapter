@@ -2,7 +2,6 @@
 
 namespace Dystcz\LunarApiPaypalAdapter\Tests;
 
-use Cartalyst\Converter\Laravel\ConverterServiceProvider;
 use Dystcz\LunarApi\JsonApiServiceProvider;
 use Dystcz\LunarApi\LunarApiServiceProvider;
 use Dystcz\LunarApiPaypalAdapter\LunarApiPaypalAdapterServiceProvider;
@@ -15,23 +14,17 @@ use Dystcz\LunarPaypal\LunarPaypalServiceProvider;
 use Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
-use Kalnoy\Nestedset\NestedSetServiceProvider;
-use LaravelJsonApi\Spec\ServiceProvider;
 use LaravelJsonApi\Testing\MakesJsonApiRequests;
 use Livewire\LivewireServiceProvider;
 use Lunar\Base\ShippingModifiers;
 use Lunar\Facades\Taxes;
-use Lunar\LunarServiceProvider;
 use Lunar\Models\Channel;
 use Lunar\Models\Country;
 use Lunar\Models\Currency;
 use Lunar\Models\CustomerGroup;
 use Lunar\Models\TaxClass;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Spatie\Activitylog\ActivitylogServiceProvider;
-use Spatie\LaravelBlink\BlinkServiceProvider;
 use Spatie\LaravelData\LaravelDataServiceProvider;
-use Spatie\MediaLibrary\MediaLibraryServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -81,15 +74,15 @@ class TestCase extends Orchestra
             // Laravel JsonApi
             \LaravelJsonApi\Encoder\Neomerx\ServiceProvider::class,
             \LaravelJsonApi\Laravel\ServiceProvider::class,
-            ServiceProvider::class,
+            \LaravelJsonApi\Spec\ServiceProvider::class,
 
             // Lunar core
-            LunarServiceProvider::class,
-            MediaLibraryServiceProvider::class,
-            ActivitylogServiceProvider::class,
-            ConverterServiceProvider::class,
-            NestedSetServiceProvider::class,
-            BlinkServiceProvider::class,
+            \Lunar\LunarServiceProvider::class,
+            \Spatie\MediaLibrary\MediaLibraryServiceProvider::class,
+            \Spatie\Activitylog\ActivitylogServiceProvider::class,
+            \Cartalyst\Converter\Laravel\ConverterServiceProvider::class,
+            \Kalnoy\Nestedset\NestedSetServiceProvider::class,
+            \Spatie\LaravelBlink\BlinkServiceProvider::class,
 
             // Lunar Paypal
             LunarPaypalServiceProvider::class,
@@ -138,6 +131,15 @@ class TestCase extends Orchestra
             'driver' => 'sqlite',
             'database' => ':memory:',
             'prefix' => '',
+        ]);
+
+        // Default payment driver
+        Config::set('lunar.payments.default', 'paypal');
+        Config::set('lunar.payments.types', [
+            'paypal' => [
+                'driver' => 'paypal',
+                'authorized' => 'payment-stripe',
+            ],
         ]);
 
         Config::set('lunar.paypal', require __DIR__.'/../vendor/dystcz/lunar-paypal/config/paypal.php');

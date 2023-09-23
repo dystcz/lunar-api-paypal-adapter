@@ -21,16 +21,18 @@ beforeEach(function () {
             ],
         ]);
 
-    $cart->createOrder();
+    $cart->shippingAddress->delete();
 
-    $cart->order->update([
+    $order = $cart->createOrder();
+
+    $order->update([
         'meta' => [
             'payment_intent' => $this->payment_intent_id,
         ],
     ]);
 
     $this->cart = $cart;
-    $this->order = $cart->order;
+    $this->order = $order;
 });
 
 it('can handle succeeded event', function () {
