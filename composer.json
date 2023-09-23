@@ -18,20 +18,10 @@
             "role": "Developer"
         }
     ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/dystcz/lunar-api.git"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/dystcz/lunar-paypal.git"
-        }
-    ],
     "require": {
         "php": "^8.2",
         "dystcz/lunar-api": "^0.5",
-        "dystcz/lunar-paypal": "^0.5",
+        "dystcz/lunar-paypal": "^0.5.0",
         "illuminate/contracts": "^10.0",
         "spatie/laravel-package-tools": "^1.14.0"
     },
@@ -51,14 +41,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Dystcz\\LunarApiPaypalAdapter\\": "src/",
-            "Dystcz\\LunarApiPaypalAdapter\\Database\\Factories\\": "database/factories/"
+            "Dystcz\\LunarApiPaypalAdapter\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Dystcz\\LunarApiPaypalAdapter\\Tests\\": "tests/",
-            "Workbench\\App\\": "workbench/app/"
+            "Dystcz\\LunarApiPaypalAdapter\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -68,11 +56,6 @@
         "build": [
             "@composer run prepare",
             "@php vendor/bin/testbench workbench:build --ansi"
-        ],
-        "start": [
-            "Composer\\Config::disableProcessTimeout",
-            "@composer run build",
-            "@php vendor/bin/testbench serve"
         ],
         "analyse": "vendor/bin/phpstan analyse",
         "test": "vendor/bin/pest",

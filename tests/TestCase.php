@@ -133,6 +133,15 @@ class TestCase extends Orchestra
             'prefix' => '',
         ]);
 
+        // Default payment driver
+        Config::set('lunar.payments.default', 'paypal');
+        Config::set('lunar.payments.types', [
+            'paypal' => [
+                'driver' => 'paypal',
+                'authorized' => 'payment-stripe',
+            ],
+        ]);
+
         Config::set('lunar.paypal', require __DIR__.'/../vendor/dystcz/lunar-paypal/config/paypal.php');
     }
 

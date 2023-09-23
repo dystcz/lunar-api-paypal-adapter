@@ -18,7 +18,7 @@ class AuthorizePaypalPayment
         $payment = Payments::driver('paypal')
             ->cart($order->cart)
             ->withData([
-                'payment_intent' => $order->meta->payment_intent,
+                'payment_intent' => $order->meta['payment_intent'],
             ])
             ->authorize();
 
