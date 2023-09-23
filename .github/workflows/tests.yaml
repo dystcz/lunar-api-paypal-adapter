@@ -17,6 +17,12 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      - name: Setup Laravel environment
+        run: |
+          cp .env.testing.example .env.testing
+          sed -i 's/PAYPAL_SANDBOX_CLIENT_ID=/PAYPAL_SANDBOX_CLIENT_ID=${{ secrets.PAYPAL_SANDBOX_CLIENT_ID }}/g' .env.testing
+          sed -i 's/PAYPAL_SANDBOX_CLIENT_SECRET=/PAYPAL_SANDBOX_CLIENT_SECRET=${{ secrets.PAYPAL_SANDBOX_CLIENT_SECRET }}/g' .env.testing
+
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2
         with:
