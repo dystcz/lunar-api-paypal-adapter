@@ -20,7 +20,7 @@
     ],
     "require": {
         "php": "^8.2",
-        "dystcz/lunar-api": "^0.6",
+        "dystcz/lunar-api": "^0.6.0-dev",
         "dystcz/lunar-paypal": "^0.6",
         "illuminate/contracts": "^10.0",
         "spatie/laravel-package-tools": "^1.14.0"
